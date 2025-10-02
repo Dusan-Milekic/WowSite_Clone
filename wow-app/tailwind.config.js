@@ -1,12 +1,13 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     screens: {
       'sm': '640px',
-      'md': '960px',
+      'md': '960px',  // Custom md breakpoint at 960px
       'lg': '1024px',
       'xl': '1280px',
       '2xl': '1536px',
