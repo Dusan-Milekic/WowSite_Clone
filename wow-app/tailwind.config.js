@@ -8,8 +8,11 @@ export default {
     screens: {
       'sm': '640px',
       'md': '960px',  // Custom md breakpoint at 960px
-      'lg': '1024px',
-      'xl': '1280px',
+      'lg': '1048px',
+      '2lg': '1113px',
+
+      'xl': '1333px',
+
       '2xl': '1536px',
     },
     extend: {},
