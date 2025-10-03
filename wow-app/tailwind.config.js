@@ -17,5 +17,9 @@ export default {
     },
     extend: {},
   },
+  fonts:{
+    poppins: ['Poppins', 'sans-serif'],
+    mavenPro: ['Maven Pro', 'sans-serif'],
+  },
   plugins: [],
 }
