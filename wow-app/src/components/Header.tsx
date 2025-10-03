@@ -1,25 +1,36 @@
 import { createRef, useState } from "react"
-import { toggleGameInfo, toggleExpansionInfo } from "./HeaderFunctions.ts"
+import { toggleGameInfo, toggleExpansionInfo, toggleCommunityInfo, toggleShopInfo } from "./HeaderFunctions.ts"
 import { gsap } from "gsap";
 export default function Header() {
     const [navState, setNavState] = useState(false);
     const navigation = createRef<HTMLDivElement>();
 
+    //game info refs
     const gameInfo = createRef<HTMLDivElement>();
     const listGameInfo = createRef<HTMLLIElement>();
     const arrowGameInfo = createRef<SVGSVGElement>();
 
+    //expansion refs
     const expansionInfo = createRef<HTMLDivElement>();
     const listExpansionInfo = createRef<HTMLLIElement>();
     const arrowExpansionInfo = createRef<SVGSVGElement>();
 
+    //community refs
     const communityInfo = createRef<HTMLDivElement>();
     const listCommunityInfo = createRef<HTMLLIElement>();
     const arrowCommunityInfo = createRef<SVGSVGElement>();
 
+    //shop refs
+    const shopInfo = createRef<HTMLDivElement>();
+    const listShopInfo = createRef<HTMLLIElement>();
+    const arrowShopInfo = createRef<SVGSVGElement>();
+
+    //states for dropdown menus
+    const [shopInfoState, setShopInfoState] = useState(false);
     const [gameInfoState, setGameInfoState] = useState(false);
     const [expansionInfoState, setExpansionInfoState] = useState(false);
     const [communityInfoState, setCommunityInfoState] = useState(false);
+
     const closeNavigation = () => {
         if (navigation.current) {
 
@@ -43,27 +54,8 @@ export default function Header() {
         }
     }
 
-    const toggleCommunityInfo = () => {
-        if (communityInfo.current && listCommunityInfo.current && arrowCommunityInfo.current && !communityInfoState) {
-            communityInfo.current.classList.remove("hidden");
-            listCommunityInfo.current.classList.add("bg-[#00000080]")
-            // Rotate the arrow icon
-            gsap.fromTo(arrowCommunityInfo.current, { rotate: 0 }, { rotate: 180, duration: 0.3 });
-            //dropdown animation for game info
-            gsap.fromTo(communityInfo.current, { height: 0, opacity: 0 }, { height: "auto", opacity: 1, duration: 0.3, ease: "power2.out" });
-        }
-        if (communityInfo.current && listCommunityInfo.current && arrowCommunityInfo.current && communityInfoState) {
-            listCommunityInfo.current.classList.remove("bg-[#00000080]")
-            gsap.to(arrowCommunityInfo.current, { rotate: 0, duration: 0.3 });
-            gsap.to(communityInfo.current, { height: 0, opacity: 0, duration: 0.3, ease: "power2.out" });
-            setTimeout(() => {
-                if (communityInfo.current) {
-                    communityInfo.current.classList.add("hidden");
-                }
-            }, 300);
-        }
-        setCommunityInfoState(!communityInfoState);
-    }
+
+
 
 
 
@@ -92,10 +84,10 @@ export default function Header() {
 
 
                 {/* Burger menu - Navigation */}
-                <nav className="m-2 p-2 md:hidden  ">
+                <nav className="m-2 p-2 md:hidden h-full ">
                     <svg xmlns="http://www.w3.org/2000/svg" onClick={openNavigation} className="hover:cursor-pointer" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" part="icon" aria-hidden="true"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
 
-                    <div className="absolute bg-[#2e1e1e]  h-full w-1/2 top-0 left-0  space-y-5 text-white hidden" ref={navigation} id="navigation">
+                    <div className="absolute bg-[#2e1e1e]  h-full overflow-y-scroll min-w-[360px] top-0 left-0  space-y-5 text-white hidden" ref={navigation} id="navigation">
                         <div className="w-8 absolute top-9 cursor-pointer" onClick={closeNavigation} >
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" part="icon" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg>
                         </div>
@@ -157,11 +149,11 @@ export default function Header() {
                                 </div>
                             </li>
                             <li className="px-4 mx-2 rounded-lg" ref={listCommunityInfo}>
-                                <div className="info  flex items-center " onClick={toggleCommunityInfo}>
+                                <div className="info  flex items-center cursor-pointer" onClick={() => toggleCommunityInfo(communityInfo, listCommunityInfo, arrowCommunityInfo, communityInfoState, setCommunityInfoState)}>
                                     <p className="text-lg font-bold ">Community</p>
                                     <svg xmlns="http://www.w3.org/2000/svg" ref={arrowCommunityInfo} className="ml-1 w-3.5" fill="none" stroke="grey" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" part="icon" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
                                 </div>
-                                <div className="font-bold mt-2 hidden" ref={communityInfo}>
+                                <div className="font-bold mt-2 hidden" ref={communityInfo} style={{ display: communityInfoState ? "block" : "none" }}>
                                     <ul className="space-y-4 py-3">
                                         <li className="hover:opacity-50 hover:cursor-pointer"><p>Forums</p></li>
                                         <li className="hover:opacity-50 hover:cursor-pointer"><p>Recruit A Friend</p></li>
@@ -182,10 +174,28 @@ export default function Header() {
                                     </ul>
                                 </div>
                             </li>
-                            <li className="px-4 mx-2 rounded-lg">
-                                <div className="info  flex items-center">
+                            <li className="px-4 mx-2 rounded-lg " ref={listShopInfo}>
+                                <div className="info  flex items-center hover:cursor-pointer" onClick={() => toggleShopInfo(shopInfo, listShopInfo, arrowShopInfo, shopInfoState, setShopInfoState)}>
                                     <p className="text-lg font-bold ">Shop</p>
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="ml-1 w-3.5" fill="none" stroke="grey" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" part="icon" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="ml-1 w-3.5" ref={arrowShopInfo} fill="none" stroke="grey" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" part="icon" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+                                </div>
+
+                                <div className="font-bold mt-2 hidden" ref={shopInfo} style={{ display: shopInfoState ? "block" : "none" }}>
+                                    <ul className="space-y-6 py-3">
+                                        <li className="hover:opacity-50 hover:cursor-pointer flex space-x-3">
+                                            <div className="w-12">
+                                                <img src="https://blz-contentstack-images.akamaized.net/v3/assets/blt72f16e066f85e164/blta76b5a8706ea4c77/63f51ab34c740e6b39ed8137/in-game_content.png" alt=""></img>
+                                            </div>
+                                            <div>
+                                                <p>In-Game Content</p>
+                                                <p className="opacity-50 font-medium text-sm">Mounts, Pets, Services, ...</p>
+                                            </div>
+
+                                        </li>
+                                        <li className="hover:opacity-50 hover:cursor-pointer"><p>Gear</p></li>
+
+                                    </ul>
+
                                 </div>
 
                             </li>
@@ -198,7 +208,7 @@ export default function Header() {
                 </nav>
 
                 {/* Logo */}
-                <div className="hidden logo pl-2 md:flex md:items-center   ">
+                <div className="hidden logo pl-2 md:flex md:items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" aria-labelledby="blz-icon-title-world-of-warcraft" viewBox="0 1 48 48" ><title id="blz-icon-title-world-of-warcraft">World of Warcraft</title><path fill="#2B374C" fill-rule="evenodd" d="M24 8.848c8.8 0 16 7.255 16 16.121 0 8.867-7.2 16.121-16 16.121S8 33.836 8 24.97 15.2 8.847 24 8.847" clip-rule="evenodd"></path><path fill="#F4BF2A" fill-rule="evenodd" d="M44 24.97c0-4.031-1.2-8.061-3.6-11.487V8.647c0-.202-.2-.202-.2-.202h-4.8c-6.8-4.635-15.8-4.635-22.6 0H7.6v5.038c-4.8 6.851-4.8 16.12 0 22.972v4.837c0 .201.2.201.2.201h4.8c6.8 4.635 15.8 4.635 22.8 0h4.8c.2 0 .2-.202.2-.403v-4.836c2.4-3.224 3.6-7.255 3.6-11.285m-37.4-.001c0-9.673 7.8-17.531 17.4-17.531s17.4 7.859 17.4 17.531C41.4 34.641 33.6 42.5 24 42.5S6.6 34.64 6.6 24.969" clip-rule="evenodd"></path><path fill="#F4BF2A" fill-rule="evenodd" d="M12.4 15.498H19c-.2.806-.2 1.612-.2 2.418C19 20.94 21 29 21 29l3-12.695 3.2 12.292s2-10.881 2-11.687c0-.605-.4-1.008-.8-1.411h7c-1 .806-1.6 2.015-2 3.224-.6 2.418-2.8 14.509-2.8 15.315s.4 1.612.8 2.217H25c.2-.605.2-1.21.2-1.814 0-1.209-1-6.448-1-6.448s-1.4 5.44-1.4 6.448c0 .605.2 1.21.4 1.814h-6.6s1.2-1.008 1.2-1.814c-.2-2.418-3.6-15.315-3.8-16.322 0-1.008-.6-2.015-1.6-2.62" clip-rule="evenodd"></path></svg>
 
                     <div className="info hidden md:flex md:items-center">

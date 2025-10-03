@@ -2,7 +2,6 @@ import { gsap } from "gsap";
 import React from "react";
 
 // Toggle Game Info dropdown using GSAP and React state.
-// No manual classList for "hidden"! Control visibility with state in JSX.
 export const toggleGameInfo = (
   gameInfo: React.RefObject<HTMLDivElement | null>,
   listGameInfo: React.RefObject<HTMLLIElement | null>,
@@ -25,7 +24,6 @@ export const toggleGameInfo = (
     listGameInfo.current.classList.remove("bg-[#00000080]");
     gsap.to(arrowGameInfo.current, { rotate: 0, duration: 0.3 });
     gsap.to(gameInfo.current, { height: 0, opacity: 0, duration: 0.3, ease: "power2.out" });
-    // Delay hiding after animation if you want to hide after fade out
     setTimeout(() => {
       setGameInfoState(false);
     }, 300);
@@ -33,7 +31,6 @@ export const toggleGameInfo = (
 };
 
 // Toggle Expansion Info dropdown using GSAP and React state.
-// No manual classList for "hidden"! Control visibility with state in JSX.
 export const toggleExpansionInfo = (
   expansionInfo: React.RefObject<HTMLDivElement | null>,
   listExpansionInfo: React.RefObject<HTMLLIElement | null>,
@@ -56,9 +53,66 @@ export const toggleExpansionInfo = (
     listExpansionInfo.current.classList.remove("bg-[#00000080]");
     gsap.to(arrowExpansionInfo.current, { rotate: 0, duration: 0.3 });
     gsap.to(expansionInfo.current, { height: 0, opacity: 0, duration: 0.3, ease: "power2.out" });
-    // Delay hiding after animation if you want to hide after fade out
     setTimeout(() => {
       setExpansionInfoState(false);
+    }, 300);
+  }
+};
+
+// Toggle Community Info dropdown using GSAP and React state.
+export const toggleCommunityInfo = (
+  communityInfo: React.RefObject<HTMLDivElement | null>,
+  listCommunityInfo: React.RefObject<HTMLLIElement | null>,
+  arrowCommunityInfo: React.RefObject<SVGSVGElement | null>,
+  communityInfoState: boolean,
+  setCommunityInfoState: React.Dispatch<React.SetStateAction<boolean>>
+) => {
+  if (!communityInfo.current || !listCommunityInfo.current || !arrowCommunityInfo.current) return;
+
+  if (!communityInfoState) {
+    listCommunityInfo.current.classList.add("bg-[#00000080]");
+    gsap.fromTo(arrowCommunityInfo.current, { rotate: 0 }, { rotate: 180, duration: 0.3 });
+    gsap.fromTo(
+      communityInfo.current,
+      { height: 0, opacity: 0 },
+      { height: "auto", opacity: 1, duration: 0.3, ease: "power2.out" }
+    );
+    setCommunityInfoState(true);
+  } else {
+    listCommunityInfo.current.classList.remove("bg-[#00000080]");
+    gsap.to(arrowCommunityInfo.current, { rotate: 0, duration: 0.3 });
+    gsap.to(communityInfo.current, { height: 0, opacity: 0, duration: 0.3, ease: "power2.out" });
+    setTimeout(() => {
+      setCommunityInfoState(false);
+    }, 300);
+  }
+};
+
+// Toggle Shop Info dropdown using GSAP and React state.
+export const toggleShopInfo = (
+  shopInfo: React.RefObject<HTMLDivElement | null>,
+  listShopInfo: React.RefObject<HTMLLIElement | null>,
+  arrowShopInfo: React.RefObject<SVGSVGElement | null>,
+  shopInfoState: boolean,
+  setShopInfoState: React.Dispatch<React.SetStateAction<boolean>>
+) => {
+  if (!shopInfo.current || !listShopInfo.current || !arrowShopInfo.current) return;
+
+  if (!shopInfoState) {
+    listShopInfo.current.classList.add("bg-[#00000080]");
+    gsap.fromTo(arrowShopInfo.current, { rotate: 0 }, { rotate: 180, duration: 0.3 });
+    gsap.fromTo(
+      shopInfo.current,
+      { height: 0, opacity: 0 },
+      { height: "auto", opacity: 1, duration: 0.3, ease: "power2.out" }
+    );
+    setShopInfoState(true);
+  } else {
+    listShopInfo.current.classList.remove("bg-[#00000080]");
+    gsap.to(arrowShopInfo.current, { rotate: 0, duration: 0.3 });
+    gsap.to(shopInfo.current, { height: 0, opacity: 0, duration: 0.3, ease: "power2.out" });
+    setTimeout(() => {
+      setShopInfoState(false);
     }, 300);
   }
 };
