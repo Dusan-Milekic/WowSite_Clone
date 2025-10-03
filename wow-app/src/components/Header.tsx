@@ -1,12 +1,25 @@
-import { createRef, useEffect, useState } from "react"
+import { createRef, useState } from "react"
+import { toggleGameInfo, toggleExpansionInfo } from "./HeaderFunctions.ts"
 import { gsap } from "gsap";
 export default function Header() {
     const [navState, setNavState] = useState(false);
     const navigation = createRef<HTMLDivElement>();
+
     const gameInfo = createRef<HTMLDivElement>();
     const listGameInfo = createRef<HTMLLIElement>();
     const arrowGameInfo = createRef<SVGSVGElement>();
+
+    const expansionInfo = createRef<HTMLDivElement>();
+    const listExpansionInfo = createRef<HTMLLIElement>();
+    const arrowExpansionInfo = createRef<SVGSVGElement>();
+
+    const communityInfo = createRef<HTMLDivElement>();
+    const listCommunityInfo = createRef<HTMLLIElement>();
+    const arrowCommunityInfo = createRef<SVGSVGElement>();
+
     const [gameInfoState, setGameInfoState] = useState(false);
+    const [expansionInfoState, setExpansionInfoState] = useState(false);
+    const [communityInfoState, setCommunityInfoState] = useState(false);
     const closeNavigation = () => {
         if (navigation.current) {
 
@@ -29,29 +42,32 @@ export default function Header() {
             gsap.fromTo(navigation.current, { x: -300 }, { x: 0, duration: 0.3, ease: "power2.out" });
         }
     }
-    const toggleGameInfo = () => {
-        if (gameInfo.current && listGameInfo.current && arrowGameInfo.current && !gameInfoState) {
-            gameInfo.current.classList.remove("hidden");
-            listGameInfo.current.classList.add("bg-[#00000080]")
-            // Rotate the arrow icon
-            gsap.fromTo(arrowGameInfo.current, { rotate: 0 }, { rotate: 180, duration: 0.3 });
-            //dropdown animation for game info
-            gsap.fromTo(gameInfo.current, { height: 0, opacity: 0 }, { height: "auto", opacity: 1, duration: 0.3, ease: "power2.out" });
-        }
-        if (gameInfo.current && listGameInfo.current && arrowGameInfo.current && gameInfoState) {
 
-            listGameInfo.current.classList.remove("bg-[#00000080]")
-            gsap.to(arrowGameInfo.current, { rotate: 0, duration: 0.3 });
-            gsap.to(gameInfo.current, { height: 0, opacity: 0, duration: 0.3, ease: "power2.out" });
+    const toggleCommunityInfo = () => {
+        if (communityInfo.current && listCommunityInfo.current && arrowCommunityInfo.current && !communityInfoState) {
+            communityInfo.current.classList.remove("hidden");
+            listCommunityInfo.current.classList.add("bg-[#00000080]")
+            // Rotate the arrow icon
+            gsap.fromTo(arrowCommunityInfo.current, { rotate: 0 }, { rotate: 180, duration: 0.3 });
+            //dropdown animation for game info
+            gsap.fromTo(communityInfo.current, { height: 0, opacity: 0 }, { height: "auto", opacity: 1, duration: 0.3, ease: "power2.out" });
+        }
+        if (communityInfo.current && listCommunityInfo.current && arrowCommunityInfo.current && communityInfoState) {
+            listCommunityInfo.current.classList.remove("bg-[#00000080]")
+            gsap.to(arrowCommunityInfo.current, { rotate: 0, duration: 0.3 });
+            gsap.to(communityInfo.current, { height: 0, opacity: 0, duration: 0.3, ease: "power2.out" });
             setTimeout(() => {
-                if (gameInfo.current) {
-                    gameInfo.current.classList.add("hidden");
+                if (communityInfo.current) {
+                    communityInfo.current.classList.add("hidden");
                 }
             }, 300);
-
         }
-        setGameInfoState(!gameInfoState);
+        setCommunityInfoState(!communityInfoState);
     }
+
+
+
+
 
     window.addEventListener("click", (e) => {
         if (navigation.current) {
@@ -93,32 +109,46 @@ export default function Header() {
                         <ul className="space-y-5 ">
                             <li className="px-4 mx-2 rounded-md " ref={listGameInfo}>
                                 <div className="flex mt-11 flex-col py-2" >
-                                    <div className="game flex  cursor-pointer" onClick={() => { toggleGameInfo() }}>
+                                    <div className="game flex  cursor-pointer" onClick={() => toggleGameInfo(gameInfo, listGameInfo, arrowGameInfo, gameInfoState, setGameInfoState)}>
                                         <p className="text-lg font-bold flex-col">Game Info</p>
-                                        <svg xmlns="http://www.w3.org/2000/svg" ref={arrowGameInfo} className="ml-1 w-3.5" fill="none" stroke="grey" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" part="icon" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" ref={arrowGameInfo} className="ml-1 w-3.5" fill="none" stroke="grey" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
                                     </div>
 
-                                    <div className="font-bold mt-2 hidden" ref={gameInfo}>
+                                    <div className="font-bold mt-2 hidden" ref={gameInfo} style={{ display: gameInfoState ? "block" : "none" }}>
                                         <ul className="space-y-4 py-3">
-                                            <li><p>Overview</p></li>
-                                            <li><p>Races</p></li>
-                                            <li><p>Classess</p></li>
-                                            <li><p>Returning players</p></li>
-                                            <li><p>Realm Status</p></li>
-                                            <li><p>Content Update Notes</p></li>
+                                            <li className="hover:opacity-50 hover:cursor-pointer"><p>Overview</p></li>
+                                            <li className="hover:opacity-50 hover:cursor-pointer"><p>Races</p></li>
+                                            <li className="hover:opacity-50 hover:cursor-pointer"><p>Classess</p></li>
+                                            <li className="hover:opacity-50 hover:cursor-pointer"><p>Returning players</p></li>
+                                            <li className="hover:opacity-50 hover:cursor-pointer"><p>Realm Status</p></li>
+                                            <li className="hover:opacity-50 hover:cursor-pointer"><p>Content Update Notes</p></li>
                                         </ul>
-                                        <p className="my-3">LORE</p>
+                                        <p className="my-3 opacity-50 text-sm">LORE</p>
                                         <ul className="space-y-4 py-3">
-                                            <li><p>Story & Media</p></li>
-                                            <li><p>Warcraft Timeline</p></li>
+                                            <li className="hover:opacity-50 hover:cursor-pointer"><p>Story & Media</p></li>
+                                            <li className="hover:opacity-50 hover:cursor-pointer"><p>Warcraft Timeline</p></li>
                                         </ul>
                                     </div>
                                 </div>
                             </li>
-                            <li className="px-4 mx-2 rounded-lg">
-                                <div className="info  flex items-center">
+                            <li className="px-4 mx-2 rounded-lg py-2" ref={listExpansionInfo} >
+
+                                <div className="info  flex items-center cursor-pointer" onClick={() => toggleExpansionInfo(expansionInfo, listExpansionInfo, arrowExpansionInfo, expansionInfoState, setExpansionInfoState)}>
                                     <p className="text-lg font-bold ">Expansions</p>
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="ml-1 w-3.5" fill="none" stroke="grey" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" part="icon" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" ref={arrowExpansionInfo} className="ml-1 w-3.5" fill="none" stroke="grey" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+                                </div>
+
+                                <div className="font-bold mt-2 hidden" ref={expansionInfo} style={{ display: expansionInfoState ? "block" : "none" }}>
+                                    <ul className="space-y-4 py-3">
+                                        <li className="hover:opacity-50 hover:cursor-pointer"><p>World of Warcraft: Midnight</p></li>
+                                        <li className="hover:opacity-50 hover:cursor-pointer"><p>The War Within</p></li>
+
+                                    </ul>
+                                    <p className="my-3 opacity-50 text-sm">WOW CLASSIC</p>
+                                    <ul className="space-y-4 py-3">
+                                        <li className="hover:opacity-50 hover:cursor-pointer"><p>Mistis of Pandria</p></li>
+
+                                    </ul>
                                 </div>
                             </li>
                             <li className="px-4 mx-2 rounded-lg">
@@ -126,10 +156,30 @@ export default function Header() {
                                     <p className="text-lg font-bold ">News</p>
                                 </div>
                             </li>
-                            <li className="px-4 mx-2 rounded-lg">
-                                <div className="info  flex items-center ">
+                            <li className="px-4 mx-2 rounded-lg" ref={listCommunityInfo}>
+                                <div className="info  flex items-center " onClick={toggleCommunityInfo}>
                                     <p className="text-lg font-bold ">Community</p>
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="ml-1 w-3.5" fill="none" stroke="grey" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" part="icon" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" ref={arrowCommunityInfo} className="ml-1 w-3.5" fill="none" stroke="grey" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" part="icon" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+                                </div>
+                                <div className="font-bold mt-2 hidden" ref={communityInfo}>
+                                    <ul className="space-y-4 py-3">
+                                        <li className="hover:opacity-50 hover:cursor-pointer"><p>Forums</p></li>
+                                        <li className="hover:opacity-50 hover:cursor-pointer"><p>Recruit A Friend</p></li>
+
+                                    </ul>
+                                    <p className="my-3 opacity-50 text-sm">LEADERBOARDS</p>
+                                    <ul className="space-y-4 py-3">
+                                        <li className="hover:opacity-50 hover:cursor-pointer"><p>Mythic Dungeon</p></li>
+                                        <li className="hover:opacity-50 hover:cursor-pointer"><p>Mythic Raid</p></li>
+                                        <li className="hover:opacity-50 hover:cursor-pointer"><p>Player vs. Player</p></li>
+
+                                    </ul>
+                                    <p className="my-3 opacity-50 text-sm">ESPORTS</p>
+                                    <ul className="space-y-4 py-3">
+                                        <li className="hover:opacity-50 hover:cursor-pointer"><p>Tournaments</p></li>
+
+
+                                    </ul>
                                 </div>
                             </li>
                             <li className="px-4 mx-2 rounded-lg">
